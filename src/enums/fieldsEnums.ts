@@ -1,0 +1,15 @@
+export enum DisplayFieldLabels {
+  Height = "Height",
+  Mass = "Mass",
+  Gender = "Gender",
+  BirthYear = "Birth Year",
+  Director = "Director",
+  Producer = "Producer",
+  ReleaseDate = "Release Date",
+  Classification = "Classification",
+  Designation = "Designation",
+  AverageHeight = "Average Height",
+  RotationPeriod = "Rotation Period",
+  OrbitalPeriod = "Orbital Period",
+  Diameter = "Diameter",
+}

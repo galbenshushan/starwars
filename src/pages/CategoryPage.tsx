@@ -68,6 +68,7 @@ const CategoryPage: React.FC = observer(() => {
               key={index}
               entity={entity}
               handleNewOrEdit={swapiStore.handleNewOrEdit}
+              allowEditAndDelete={true}
             />
           ))
         ) : (

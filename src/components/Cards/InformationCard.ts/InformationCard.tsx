@@ -11,6 +11,7 @@ import { observer } from "mobx-react-lite"; // Import observer
 import { swapiStore } from "../../../stores/SwapiStore";
 import { Option } from "../../../types/apiTypes";
 import { styles } from "./styles";
+import { all } from "axios";
 
 const Item = styled("div")(({ theme }) => ({
   flex: "1 1 calc(25% - 24px)",
@@ -24,10 +25,11 @@ const Item = styled("div")(({ theme }) => ({
 interface InformationCardProps {
   entity: Option | null;
   handleNewOrEdit: (entity: Option) => void;
+  allowEditAndDelete?: boolean;
 }
 
 const InformationCard: React.FC<InformationCardProps> = observer(
-  ({ entity, handleNewOrEdit }) => {
+  ({ entity, handleNewOrEdit, allowEditAndDelete }) => {
     if (!entity) return null;
 
     const fields = swapiStore.getDisplayFields(entity);
@@ -57,22 +59,26 @@ const InformationCard: React.FC<InformationCardProps> = observer(
             >
               More
             </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleNewOrEdit(entity)}
-              sx={styles.button}
-            >
-              Edit
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => swapiStore.removeEntity(entity)}
-              sx={styles.button}
-            >
-              Remove
-            </Button>
+            {allowEditAndDelete && (
+              <>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => handleNewOrEdit(entity)}
+                  sx={styles.button}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => swapiStore.removeEntity(entity)}
+                  sx={styles.button}
+                >
+                  Remove
+                </Button>
+              </>
+            )}
           </CardActions>
         </Card>
       </Item>

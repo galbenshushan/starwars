@@ -8,6 +8,7 @@ import { appStore } from "./stores/AppStore";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 import { createStar } from "./utils/UI";
+import Home from "./pages/Home";
 
 const App: React.FC = observer(() => {
   useEffect(() => {
@@ -25,7 +26,8 @@ const App: React.FC = observer(() => {
         {appStore.loading && <Loader />}
         <Navbar />
         <Routes>
-          <Route path="/" element={<SearchPage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/category/:category" element={<CategoryPage />} />
         </Routes>
       </Router>

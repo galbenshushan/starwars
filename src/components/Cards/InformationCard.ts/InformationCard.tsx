@@ -43,7 +43,7 @@ const InformationCard: React.FC<InformationCardProps> = ({
 
           {fields.map((field, index) => (
             <Typography key={index}>
-              <strong>{field.label}:</strong> {field.value}
+              {field.label}: {field.value}
             </Typography>
           ))}
         </CardContent>

@@ -71,6 +71,29 @@ class SwapiStore {
     }
   };
 
+  addEntity(newEntity: Option) {
+    const categoryIndex = this.entities.findIndex(
+      (item) => item.category === newEntity.category
+    );
+    if (categoryIndex !== -1) {
+      this.entities[categoryIndex].data.push(newEntity);
+    } else {
+      this.entities.push({
+        category: newEntity.category,
+        data: [newEntity],
+      });
+    }
+  }
+
+  public getEntityConfig = (
+    templateEntity: Record<string, any>
+  ): Record<string, string> => {
+    return Object.keys(templateEntity).reduce((acc, key) => {
+      acc[key] = "";
+      return acc;
+    }, {} as Record<string, string>);
+  };
+
   public getDisplayFields = (entity: any) => {
     return [
       { label: DisplayFieldLabels.Height, value: entity.height },

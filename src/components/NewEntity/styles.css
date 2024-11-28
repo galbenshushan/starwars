@@ -1,0 +1,53 @@
+/* NewEntityDialog.css */
+.dialog-paper {
+  background-color: #1e1e1e;
+  max-width: 1000px;
+  max-height: 80vh;
+  padding: 40px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.dialog-title {
+  color: white;
+  text-align: center;
+}
+
+.dialog-content {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.form-box {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+}
+
+.form-control {
+  display: flex;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.form-label {
+  color: white;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.input {
+  color: white;
+  background-color: black;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 4px;
+}
+
+.input:focus {
+  box-shadow: 0 0 6px 6px rgba(255, 255, 255, 0.6);
+}
+
+.dialog-actions {
+  justify-content: flex-end;
+}

@@ -10,7 +10,6 @@ interface InfoTableCellProps {
   formatString?: string;
 }
 
-
 const InfoTableCell: React.FC<InfoTableCellProps> = ({
   keyToUse,
   value,
@@ -27,6 +26,8 @@ const InfoTableCell: React.FC<InfoTableCellProps> = ({
       ? capitalize(value)
       : getDateDisplayValue(value, formatString);
 
+      
+  if (!formattedValue) return null;
   return (
     <TableCell sx={cellStyles.tableCell}>
       <Typography sx={cellStyles.keyText}>{keyToUse}:</Typography>

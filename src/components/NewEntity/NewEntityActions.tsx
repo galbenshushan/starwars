@@ -1,27 +1,29 @@
 import React from "react";
 import { DialogActions, Button } from "@mui/material";
+import { swapiStore } from "../../stores/SwapiStore";
 
 interface NewEntityActionsProps {
-  handleCloseModal: () => void;
-  handleCreateEntity: () => void;
+  handleCreateOrEditEntity: () => void;
 }
 
-const NewEntityActions: React.FC<NewEntityActionsProps> = ({ handleCloseModal, handleCreateEntity }) => {
+const NewEntityActions: React.FC<NewEntityActionsProps> = ({
+  handleCreateOrEditEntity,
+}) => {
   return (
     <DialogActions sx={{ justifyContent: "flex-end" }}>
       <Button
-        onClick={handleCloseModal}
+        onClick={swapiStore.resetAndCloseEntityModal}
         color="secondary"
         sx={{ color: "white" }}
       >
         Cancel
       </Button>
       <Button
-        onClick={handleCreateEntity}
+        onClick={handleCreateOrEditEntity}
         color="primary"
         sx={{ color: "white" }}
       >
-        Create
+        {swapiStore.selectedOption ? "Edit" : "Create"}
       </Button>
     </DialogActions>
   );

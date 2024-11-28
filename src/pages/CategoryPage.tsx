@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { Box, Button } from "@mui/material";
@@ -15,37 +15,34 @@ import { Categories } from "../enums/apiEnums";
 
 const CategoryPage: React.FC = observer(() => {
   const { category } = useParams();
-
-  const [entityFieldsConfig, setEntityFieldsConfig] = useState<any>({});
-  const [openModal, setOpenModal] = useState(false);
-
   const entities: Option[] =
     swapiStore.entities.find((item) => item.category === category)?.data || [];
 
   const templateEntity = entities.length > 0 ? entities[0] : null;
 
   useEffect(() => {
-    if (openModal) {
+    if (swapiStore.openEntityModal) {
       const fieldsConfig = templateEntity
         ? swapiStore.getEntityConfig(templateEntity)
         : {};
-      setEntityFieldsConfig(fieldsConfig);
+      swapiStore.setEntityFieldsConfig(
+        swapiStore.selectedOption ? swapiStore.selectedOption : fieldsConfig
+      );
     }
-  }, [openModal, templateEntity]);
+  }, [swapiStore.openEntityModal, templateEntity]);
 
-  const handleOpenModal = () => setOpenModal(true);
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setEntityFieldsConfig({});
-  };
-
-  const handleCreateEntity = () => {
-    if (Object.keys(entityFieldsConfig).length > 0) {
-      const newEntity: Option = { ...entityFieldsConfig, category: category! };
+  const handleCreateOrEditEntity = () => {
+    if (Object.keys(swapiStore.entityFieldsConfig).length > 0) {
+      const newEntity: Option = {
+        ...swapiStore.entityFieldsConfig,
+        category: category,
+      };
+      if (swapiStore.selectedOption) {
+        swapiStore.removeEntity(swapiStore.selectedOption as Option);
+        swapiStore.setSelectedOption(null);
+      }
       swapiStore.addEntity(newEntity);
-      setEntityFieldsConfig({});
-      handleCloseModal();
+      swapiStore.resetAndCloseEntityModal();
     }
   };
 
@@ -58,7 +55,7 @@ const CategoryPage: React.FC = observer(() => {
           variant="contained"
           color="primary"
           sx={{ marginBottom: "20px" }}
-          onClick={handleOpenModal}
+          onClick={() => swapiStore.setOpenEntityModal(true)}
         >
           Create New Entity
         </Button>
@@ -70,7 +67,7 @@ const CategoryPage: React.FC = observer(() => {
             <InformationCard
               key={index}
               entity={entity}
-              handleShowMore={swapiStore.handleShowMore}
+              handleNewOrEdit={swapiStore.handleNewOrEdit}
             />
           ))
         ) : (
@@ -79,12 +76,9 @@ const CategoryPage: React.FC = observer(() => {
       </Container>
       <InformationCardDialog selectedOption={swapiStore.selectedOption} />
       <NewEntityDialog
-        openModal={openModal}
-        handleCloseModal={handleCloseModal}
-        entityFieldsConfig={entityFieldsConfig}
-        setEntityFieldsConfig={setEntityFieldsConfig}
+        entityFieldsConfig={swapiStore.entityFieldsConfig}
         templateEntity={templateEntity}
-        handleCreateEntity={handleCreateEntity}
+        handleCreateOrEditEntity={handleCreateOrEditEntity}
       />
     </Box>
   );

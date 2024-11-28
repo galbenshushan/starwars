@@ -8,36 +8,28 @@ import {
 } from "@mui/material";
 import InputsRenderer from "./InputsRenderer";
 import NewEntityActions from "./NewEntityActions";
+import { swapiStore } from "../../stores/SwapiStore";
 
 interface NewEntityDialogProps {
-  openModal: boolean;
-  handleCloseModal: () => void;
   entityFieldsConfig: any;
-  setEntityFieldsConfig: React.Dispatch<React.SetStateAction<any>>;
   templateEntity: any;
-  handleCreateEntity: () => void;
+  handleCreateOrEditEntity: () => void;
 }
 
 const NewEntityDialog: React.FC<NewEntityDialogProps> = ({
-  openModal,
-  handleCloseModal,
   entityFieldsConfig,
-  setEntityFieldsConfig,
   templateEntity,
-  handleCreateEntity,
+  handleCreateOrEditEntity,
 }) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setEntityFieldsConfig((prevState: any) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    swapiStore.setEntityFieldsConfig({ ...entityFieldsConfig, [name]: value });
   };
 
   return (
     <Dialog
-      open={openModal}
-      onClose={handleCloseModal}
+      open={swapiStore.openEntityModal}
+      onClose={swapiStore.resetAndCloseEntityModal}
       TransitionComponent={Fade}
       BackdropComponent={Backdrop}
       sx={{
@@ -52,7 +44,7 @@ const NewEntityDialog: React.FC<NewEntityDialogProps> = ({
       }}
     >
       <DialogTitle sx={{ color: "white", textAlign: "center" }}>
-        Create New Entity
+        {swapiStore.selectedOption ? "Edit" : "Create"} New Entity
       </DialogTitle>
       <DialogContent sx={{ flex: 1, marginBottom: "20px" }}>
         <InputsRenderer
@@ -61,10 +53,7 @@ const NewEntityDialog: React.FC<NewEntityDialogProps> = ({
           handleInputChange={handleInputChange}
         />
       </DialogContent>
-      <NewEntityActions
-        handleCloseModal={handleCloseModal}
-        handleCreateEntity={handleCreateEntity}
-      />
+      <NewEntityActions handleCreateOrEditEntity={handleCreateOrEditEntity} />
     </Dialog>
   );
 };

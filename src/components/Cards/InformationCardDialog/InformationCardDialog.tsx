@@ -30,8 +30,8 @@ const InformationCardDialog: React.FC<InformationCardDialogProps> = ({
 
   return (
     <Modal
-      open={swapiStore.openModal}
-      onClose={() => swapiStore.setOpenModal(false)}
+      open={swapiStore.openShowMoreModal}
+      onClose={() => swapiStore.setOpenShowMoreModal(false)}
     >
       <Box sx={styles.modalBox}>
         {entityToDisplay ? (

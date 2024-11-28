@@ -7,34 +7,52 @@ import { DisplayFieldLabels } from "../enums/fieldsEnums";
 import { capitalize } from "../utils/Strings";
 
 class SwapiStore {
-  @observable entities: { category: string; data: any[] }[] = [];
-  @observable selectedOption: Option | null = null;
-  @observable openModal: boolean = false;
+  @observable public entities: { category: string; data: any[] }[] = [];
+  @observable public selectedOption: Option | null = null;
+  @observable public openEntityModal: boolean = false;
+  @observable public openShowMoreModal: boolean = false;
+  @observable public entityFieldsConfig: any = {};
 
   constructor() {
     makeObservable(this);
     this.fetchAllEntities();
   }
 
-  setOpenModal(value: boolean) {
-    this.openModal = value;
+  setOpenEntityModal(value: boolean) {
+    this.openEntityModal = value;
+  }
+
+  setOpenShowMoreModal(value: boolean) {
+    this.openShowMoreModal = value;
   }
 
   setSelectedOption(entity: Option | null) {
     this.selectedOption = entity;
   }
 
+  setEntityFieldsConfig(config: any) {
+    this.entityFieldsConfig = config;
+  }
+
+  public resetAndCloseEntityModal = () => {
+    this.setEntityFieldsConfig({});
+    this.setOpenEntityModal(false);
+    if (this.selectedOption) this.setSelectedOption(null);
+  };
+
+  private get serializeEntities() {
+    return this.entities.flatMap((category) =>
+      category.data.map((item: any) => ({
+        ...item,
+        category: category.category,
+      }))
+    );
+  }
+
   public serializeEntitiesForSearch = (query: string) => {
-    return this.entities
-      .flatMap((category) =>
-        category.data.map((item: any) => ({
-          ...item,
-          category: category.category,
-        }))
-      )
-      .filter((item: any) =>
-        (item.name || item.title).toLowerCase().includes(query.toLowerCase())
-      );
+    return this.serializeEntities.filter((item: any) =>
+      (item.name || item.title).toLowerCase().includes(query.toLowerCase())
+    );
   };
 
   @action public fetchAllEntities = async () => {
@@ -71,7 +89,7 @@ class SwapiStore {
     }
   };
 
-  addEntity(newEntity: Option) {
+  public addEntity(newEntity: Option) {
     const categoryIndex = this.entities.findIndex(
       (item) => item.category === newEntity.category
     );
@@ -84,6 +102,22 @@ class SwapiStore {
       });
     }
   }
+
+  public removeEntity = (entity: Option) => {
+    this.entities = this.entities.map((category) => ({
+      category: category.category,
+      data: category.data.filter(
+        (item) => item.name !== entity.name || item.title !== entity.title
+      ),
+    }));
+  };
+
+  public updateEntity = (updatedEntity: Option) => {
+    this.entities = this.entities.map((category) => ({
+      category: category.category,
+      data: category.data,
+    }));
+  };
 
   public getEntityConfig = (
     templateEntity: Record<string, any>
@@ -128,9 +162,9 @@ class SwapiStore {
     return entity?.opening_crawl;
   };
 
-  public handleShowMore = (entity: Option) => {
+  public handleNewOrEdit = (entity: Option) => {
     this.setSelectedOption(entity);
-    this.setOpenModal(true);
+    this.setOpenEntityModal(true);
   };
 }
 

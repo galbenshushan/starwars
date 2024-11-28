@@ -48,7 +48,7 @@ const SearchPage: React.FC = observer(() => {
         <Container>
           <InformationCard
             entity={swapiStore.selectedOption}
-            handleShowMore={() => swapiStore.setOpenModal(true)}
+            handleNewOrEdit={() => swapiStore.setOpenEntityModal(true)}
           />
         </Container>
       </Box>

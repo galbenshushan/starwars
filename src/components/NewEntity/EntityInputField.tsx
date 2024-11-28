@@ -12,7 +12,7 @@ const EntityInputField: React.FC<EntityInputFieldProps> = ({
   keyToUse,
   entityFieldsConfig,
   handleInputChange,
-}) => {
+}) => {  
   return (
     <Grid item xs={6}>
       <FormControl sx={{ width: "100%" }}>
